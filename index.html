@@ -1,37 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Pilsen Photo — photography from Chicago's Pilsen neighborhood. Street, portrait, and documentary work.">
-  <meta property="og:image" content="https://pilsenphoto.com/logo.png">
-  <title>Pilsen Photo</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
-    h1 { font-size: 3rem; margin-bottom: 1rem; font-weight: 300; letter-spacing: -0.02em; }
-    .subtitle { color: #888; margin-bottom: 4rem; font-size: 1.1rem; }
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 800px; width: 100%; }
-    .card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 2rem; text-decoration: none; color: inherit; transition: all 0.2s; }
-    .card:hover { border-color: #666; transform: translateY(-4px); }
-    .card h2 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 500; }
-    .card p { color: #aaa; line-height: 1.6; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pilsen Photo — photography and videography from Chicago's Pilsen neighborhood. Drone, vlogs, content production for creators and brands.">
+<title>Pilsen Photo — Chicago Content Studio</title>
+<style>
+:root{--gold:#d4a853;--gold-dim:#a98742;--ink:#0a0a0c;--panel:#14141a;--line:#26262e;--text:#f4f1ea;--muted:#8e8a7d}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ink);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
-  </style>
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--ink);z-index:10}
+nav .logo{font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+nav .logo span{color:var(--gold)}
+nav .links{display:flex;gap:24px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+nav .links a:hover{color:var(--gold)}
+@media(max-width:640px){nav .links{display:none}}
+
+.hero{padding:96px 24px 72px;border-bottom:1px solid var(--line);text-align:center}
+.hero .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.hero h1{font-family:Georgia,serif;font-size:clamp(36px,7vw,72px);font-weight:300;line-height:1.05;letter-spacing:-.01em;max-width:16ch;margin:0 auto 24px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{color:var(--muted);font-size:17px;max-width:52ch;margin:0 auto 36px}
+.btn{display:inline-block;padding:14px 32px;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;border:1px solid transparent;transition:.2s}
+.btn.gold{background:var(--gold);color:var(--ink)}
+.btn.gold:hover{background:var(--gold-dim)}
+.btn.ghost{border-color:var(--line);color:var(--text)}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+section{padding:80px 0;border-bottom:1px solid var(--line)}
+section .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+section h2{font-family:Georgia,serif;font-size:clamp(28px,5vw,44px);font-weight:300;margin-bottom:16px;max-width:20ch}
+section .lede{color:var(--muted);max-width:56ch;margin-bottom:40px}
+
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.svc{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px;transition:.2s}
+.svc:hover{border-color:var(--gold-dim);transform:translateY(-2px)}
+.svc h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--gold)}
+.svc p{color:var(--muted);font-size:14px}
+
+.portfolio{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.folio{background:var(--panel);border:1px solid var(--line);border-radius:10px;aspect-ratio:16/10;display:flex;align-items:flex-end;padding:20px;position:relative;overflow:hidden;transition:.2s}
+.folio:hover{border-color:var(--gold-dim)}
+.folio::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,168,83,.08) 0%,transparent 60%)}
+.folio span{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);position:relative}
+
+.contact-box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:48px;text-align:center}
+.contact-box h2{margin-bottom:8px}
+.contact-box p{color:var(--muted);margin-bottom:28px}
+.contact-box .email{font-family:Georgia,serif;font-size:22px;color:var(--gold)}
+
+footer{padding:40px 24px;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-align:center;border-top:1px solid var(--line)}
+footer a{color:var(--muted);border-bottom:1px solid var(--line)}
+footer a:hover{color:var(--gold)}
+</style>
 </head>
 <body>
-  <h1>Pilsen Photo</h1>
-  <p class="subtitle">Chicago, IL — Street & Documentary</p>
-  <div class="cards">
-        <div class="card">
-      <h2>About</h2>
-      <p>Photography rooted in the neighborhood. Faces, walls, and the light between.</p>
-    </div>
-    <div class="card">
-      <h2>Portfolio</h2>
-      <p>Coming soon.</p>
+
+<nav>
+  <div class="logo">Pilsen <span>Photo</span></div>
+  <div class="links">
+    <a href="#services">Services</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">Chicago · Pilsen Neighborhood</div>
+  <h1>Content that <em>actually moves</em> the needle.</h1>
+  <p>Drone photography, vlog production, and full-service content for creators and brands. Based in Pilsen, shooting everywhere.</p>
+  <a href="#contact" class="btn gold">Book a Shoot</a>
+  <a href="#portfolio" class="btn ghost" style="margin-left:12px">See Work</a>
+</header>
+
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow">What we do</div>
+    <h2>Photo, video, drone, edit.</h2>
+    <p class="lede">One call, one crew, one deliverable. No agency markup, no handoffs.</p>
+    <div class="services">
+      <div class="svc"><h3>Drone Photography</h3><p>FAA Part 107 licensed. Aerials for real estate, events, construction progress, and brand content.</p></div>
+      <div class="svc"><h3>Vlog Production</h3><p>Full-day or half-day shoots. We handle lighting, audio, and direction — you just be you.</p></div>
+      <div class="svc"><h3>Brand Content</h3><p>Product shots, behind-the-scenes, launch content. Built for TikTok, Reels, and YouTube.</p></div>
+      <div class="svc"><h3>Event Coverage</h3><p>Multi-cam, drone, and same-day edits. Weddings, corporate, and everything in between.</p></div>
+      <div class="svc"><h3>Editing + Post</h3><p>Color grade, sound mix, motion graphics. Delivered in every format you need.</p></div>
+      <div class="svc"><h3>Content Strategy</h3><p>Not sure what to shoot? We'll audit your feed and build a 30-day content calendar.</p></div>
     </div>
   </div>
-  <footer style="text-align:center;color:#555;padding:2rem 1rem 3rem;font-size:0.85rem">&copy; 2026 FatCat Asset Management</footer>
+</section>
+
+<section id="portfolio">
+  <div class="wrap">
+    <div class="eyebrow">Selected work</div>
+    <h2>Recent shoots.</h2>
+    <p class="lede">A sample of what we've delivered for clients across Chicago.</p>
+    <div class="portfolio">
+      <div class="folio"><span>Drone · West Loop Rooftop</span></div>
+      <div class="folio"><span>Vlog · FatCat Cruz Channel</span></div>
+      <div class="folio"><span>Brand · NOD Product Launch</span></div>
+      <div class="folio"><span>Event · Pilsen Street Fest</span></div>
+      <div class="folio"><span>Real Estate · Dan Cruz Homes</span></div>
+      <div class="folio"><span>Documentary · 18th Street</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="eyebrow">About</div>
+    <h2>Pilsen Photo is the content arm of FatCat Asset Management.</h2>
+    <p class="lede">We started shooting our own properties, then our own products, then other people's everything. Based in Pilsen, we know the light, the walls, and the angles that make Chicago look like Chicago.</p>
+    <p class="lede">Our clients are creators, brokers, builders, and brands who need content that performs — not just content that exists. If it doesn't get views, clicks, or calls, we didn't do our job.</p>
+    <p class="lede">Part of the same team behind <a href="https://fatcatcruz.com" style="color:var(--gold)">FatCat Cruz</a>, <a href="https://negotiatorsondemand.com" style="color:var(--gold)">NOD Academy</a>, and <a href="https://dancruzhomes.com" style="color:var(--gold)">Dan Cruz Homes</a>.</p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <div class="eyebrow">Contact</div>
+      <h2>Book a shoot.</h2>
+      <p>Tell us what you need. We'll send back a quote and available dates within 24 hours.</p>
+      <p class="email">dancruzhomes@gmail.com</p>
+      <a href="mailto:dancruzhomes@gmail.com?subject=Pilsen%20Photo%20—%20Booking%20Inquiry" class="btn gold" style="margin-top:20px">Email Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Pilsen Photo · Chicago · A FatCat Asset Management Company</p>
+  <p style="margin-top:8px"><a href="https://fatcatam.com">fatcatam.com</a> · <a href="https://fatcatcruz.com">fatcatcruz.com</a> · <a href="https://negotiatorsondemand.com">negotiatorsondemand.com</a></p>
+</footer>
+
 </body>
 </html>
