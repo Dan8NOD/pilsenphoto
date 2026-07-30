@@ -52,6 +52,18 @@ section .lede{color:var(--muted);max-width:56ch;margin-bottom:40px}
 .contact-box p{color:var(--muted);margin-bottom:28px}
 .contact-box .email{font-family:Georgia,serif;font-size:22px;color:var(--gold)}
 
+.lead-form{max-width:480px;margin:0 auto;text-align:left}
+.lead-form .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.lead-form .field{margin-bottom:16px}
+.lead-form label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.lead-form input,.lead-form select,.lead-form textarea{width:100%;background:var(--ink);border:1px solid var(--line);border-radius:6px;padding:11px 12px;color:var(--text);font-family:inherit;font-size:14px}
+.lead-form input:focus,.lead-form select:focus,.lead-form textarea:focus{outline:none;border-color:var(--gold-dim)}
+.lead-form textarea{resize:vertical}
+.lead-form button{width:100%;border:none;cursor:pointer;margin-top:4px;font-size:12px}
+.lead-status{margin-top:16px;font-size:14px;display:none}
+.contact-alt{margin-top:24px;color:var(--muted);font-size:13px}
+@media(max-width:560px){.lead-form .form-row{grid-template-columns:1fr}}
+
 footer{padding:40px 24px;color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-align:center;border-top:1px solid var(--line)}
 footer a{color:var(--muted);border-bottom:1px solid var(--line)}
 footer a:hover{color:var(--gold)}
@@ -255,11 +267,106 @@ footer a:hover{color:var(--gold)}
       <div class="eyebrow">Contact</div>
       <h2>Book a shoot.</h2>
       <p>Tell us what you need. We'll send back a quote and available dates within 24 hours.</p>
-      <p class="email">dancruzhomes@gmail.com</p>
-      <a href="mailto:dancruzhomes@gmail.com?subject=Pilsen%20Photo%20—%20Booking%20Inquiry" class="btn gold" style="margin-top:20px">Email Us</a>
+
+      <form id="bookingForm" class="lead-form" onsubmit="return submitLeadForm(event)">
+        <div class="form-row">
+          <div class="field">
+            <label for="lf-name">Name</label>
+            <input type="text" id="lf-name" name="name" required>
+          </div>
+          <div class="field">
+            <label for="lf-email">Email</label>
+            <input type="email" id="lf-email" name="email" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="lf-phone">Phone (optional)</label>
+            <input type="tel" id="lf-phone" name="phone">
+          </div>
+          <div class="field">
+            <label for="lf-intent">What do you need?</label>
+            <select id="lf-intent" name="intent">
+              <option value="Content production">Content production</option>
+              <option value="Become a Creator">Become a Creator program</option>
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="lf-message">Tell us about the project</label>
+          <textarea id="lf-message" name="message" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn gold">Send Inquiry</button>
+      </form>
+      <div class="lead-status" id="bookingFormStatus"></div>
+
+      <p class="contact-alt">Prefer email? <a href="mailto:dancruzhomes@gmail.com?subject=Pilsen%20Photo%20—%20Booking%20Inquiry" style="color:var(--gold)">dancruzhomes@gmail.com</a></p>
     </div>
   </div>
 </section>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     Lead capture — posts directly to the shared Supabase project's
+     lead_submissions table using the public anon key (RLS explicitly
+     allows anonymous INSERT on this table, no server route needed). Same
+     pattern already shipped on dancruzhomes.com. This key can only ever
+     write new rows here, not read or modify existing ones.
+     ══════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  var SUPABASE_URL = 'https://iubxycckgrplbpdbncfk.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_L92hXORLG-Df4WiZxVq-6Q_X3AB47yl';
+
+  window.submitLeadForm = function(event){
+    event.preventDefault();
+    var form = document.getElementById('bookingForm');
+    var statusEl = document.getElementById('bookingFormStatus');
+    var data = new FormData(form);
+    var payload = {
+      site: 'pilsenphoto.com',
+      form_type: 'booking_inquiry',
+      status: 'new',
+      name: data.get('name'),
+      email: data.get('email'),
+      phone: data.get('phone') || null,
+      message: data.get('message') || null,
+      props: { intent: data.get('intent') }
+    };
+
+    var btn = form.querySelector('button[type="submit"]');
+    var originalText = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Sending…';
+
+    fetch(SUPABASE_URL + '/rest/v1/lead_submissions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload)
+    }).then(function(r){
+      btn.disabled = false; btn.textContent = originalText;
+      if(!r.ok) throw new Error('Request failed: ' + r.status);
+      form.reset();
+      form.style.display = 'none';
+      statusEl.style.display = 'block';
+      statusEl.style.color = 'var(--gold)';
+      statusEl.textContent = "Got it — we'll send a quote and available dates within 24 hours.";
+    }).catch(function(err){
+      btn.disabled = false; btn.textContent = originalText;
+      statusEl.style.display = 'block';
+      statusEl.style.color = '#ff6b6b';
+      statusEl.textContent = 'Something went wrong sending that — email dancruzhomes@gmail.com directly instead.';
+      console.warn('Lead submit failed:', err.message);
+    });
+
+    return false;
+  };
+})();
+</script>
 
 <footer>
   <p>© 2026 Pilsen Photo · Chicago · A FatCat Asset Management Company</p>
